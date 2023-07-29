@@ -17,7 +17,8 @@ mongoose.connect("mongodb://localhost:27017/mestodb", { family: 4 });
 
 app.use(requestLogger);
 app.use(cors({
-  origin: "http://localhost:3001",
+  origin: "https://mesto-maria.nomoredomains.sbs",
+  // origin: "http://localhost:3001",
   credentials: true,
 }));
 app.use(cookieParser());

@@ -117,7 +117,8 @@ class API {
 
 }
 export const api = new API({
-    url: 'http://localhost:3000',
+    url: 'https://api.mesto-maria.nomoredomains.sbs', 
+    // url: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
