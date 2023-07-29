@@ -21,6 +21,14 @@ const login = async (req, res, next) => {
   }
 };
 
+const logOut = async (req, res, next) => {
+  try {
+      res.clearCookie("jwt").send({ message: "Кука успешно удалена." });
+  } catch (err) {
+      next(err);
+  }
+};
+
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
@@ -111,5 +119,5 @@ const getInforCurrentUser = async (req, res, next) => {
 };
 
 module.exports = {
-  getUsers, createUser, getUserId, setProfile, setAvatar, getInforCurrentUser, login,
+  getUsers, createUser, getUserId, setProfile, setAvatar, getInforCurrentUser, login, logOut
 };

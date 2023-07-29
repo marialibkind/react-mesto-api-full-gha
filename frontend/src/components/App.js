@@ -14,7 +14,7 @@ import ProtectedRouteElement from "./ProtectedRoute";
 import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
-import { login, loginWithToken, register } from "../utils/apiAuth";
+import { login, loginWithToken, register, logOut } from "../utils/apiAuth";
 import InfoToolTip from "./InfoToolTip";
 
 
@@ -36,16 +36,14 @@ function App() {
   const [infoTooltipMessage, setInfoTooltipMessage] = useState('');
 
    useEffect(() => {
-    if (localStorage.getItem("token")) {
       loginWithToken().then((res) => {
         if (res) {
-
           setLoggedIn(true);
           navigate("/", { replace: true });
-          setUserEmail(res.data.email);
+          setUserEmail(res.email);
         }
       }).catch((error) => console.error(error))
-    }
+    
   }, [])
 
   useEffect(() => {
@@ -89,7 +87,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     }).catch((error) => console.error(error))
@@ -141,7 +139,6 @@ function App() {
       if (res != false) {
         setLoggedIn(true);
         navigate("/", { replace: true });
-        localStorage.setItem("token", res.token);
         setUserEmail(email);
       }
     }).catch((error) => {
@@ -171,21 +168,23 @@ function App() {
 
   }
 
-  function logOut() {
-    localStorage.removeItem("token");
+
+
+  function handleLogOut() {
     navigate("/sign-in", { replace: true });
     setIsSuccessInfoTooltipStatus(true);
     setInfoTooltipMessage("Вы успешно вышли!");
     setIsToolTipOpen(true);
     setUserEmail('');
     setLoggedIn(false);
+    logOut().then().catch(error => console.log(error));
   }
 
 
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header email={userEmail} onLogout={logOut} />
+        <Header email={userEmail} onLogout={handleLogOut} />
 
         <CurrentCards.Provider value={cards}>
           <Routes>
