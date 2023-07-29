@@ -2,7 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const CustomError = require("../errors/customError");
-const {NODE_ENV, JWT_SECRET} = process.env;
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const login = async (req, res, next) => {
   try {
@@ -24,9 +25,9 @@ const login = async (req, res, next) => {
 
 const logOut = async (req, res, next) => {
   try {
-      res.clearCookie("jwt").send({ message: "Кука успешно удалена." });
+    res.clearCookie("jwt").send({ message: "Кука успешно удалена." });
   } catch (err) {
-      next(err);
+    next(err);
   }
 };
 
@@ -120,5 +121,5 @@ const getInforCurrentUser = async (req, res, next) => {
 };
 
 module.exports = {
-  getUsers, createUser, getUserId, setProfile, setAvatar, getInforCurrentUser, login, logOut
+  getUsers, createUser, getUserId, setProfile, setAvatar, getInforCurrentUser, login, logOut,
 };
