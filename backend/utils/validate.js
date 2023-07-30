@@ -11,14 +11,11 @@ const cardValidation = celebrate({
       return value;
     }),
   }),
-  params: Joi.object().keys({
-    cardId: Joi.string().length(24).hex(),
-  }),
 });
 
 const cardValidationId = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().length(24).hex(),
+    cardId: Joi.string().required().length(24).hex(),
   }),
 });
 
@@ -35,16 +32,24 @@ const userValidation = celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),
-  params: Joi.object().keys({
-    userId: Joi.string().length(24).hex(),
+});
+
+const userLoginValidation = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8),
   }),
 });
 
-const userUpdateValidation = celebrate({
+const userIdValidation = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().length(24).hex(),
+  }),
+});
+
+const userUpdateAvatarValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom((value, helper) => {
+    avatar: Joi.string().required().custom((value, helper) => {
       if (!validator.isWebUri(value)) {
         return helper.error("это не url");
       }
@@ -53,6 +58,19 @@ const userUpdateValidation = celebrate({
   }),
 });
 
+const userUpdateValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
+  }),
+});
+
 module.exports = {
-  cardValidation, cardValidationId, userValidation, userUpdateValidation,
+  cardValidation,
+  cardValidationId,
+  userValidation,
+  userUpdateValidation,
+  userLoginValidation,
+  userIdValidation,
+  userUpdateAvatarValidation,
 };
